@@ -5,8 +5,8 @@ services:
     container_name: product_db
     environment:
       POSTGRES_DB: productdb
-      POSTGRES_USER : postgres
-      POSTGRES_PASSWORD : Abhi123
+      POSTGRES_USER : ${POSTGRES_USER}
+      POSTGRES_PASSWORD : ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
