@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -51,5 +52,21 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id){
         productService.delete(id);
+    }
+    @GetMapping("/filter")
+    public Page<Product> filterProducts(
+            @RequestParam(required = false) String category,
+            @RequestParam(required=false) String brand,
+            @RequestParam(required=false) BigDecimal minPrice,
+            @RequestParam(required=false) BigDecimal maxPrice,
+            @RequestParam(required=false) Double minRating,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name,asc") String[] sort
+    ){
+        Sort.Direction direction=Sort.Direction.fromString(sort[1]);
+        Sort sortOrder = Sort.by(direction,sort[0]);
+        Pageable pageable=PageRequest.of(page,size,sortOrder);
+        return productService.filterProducts(category,brand,minPrice,maxPrice,minRating,pageable);
     }
 }
