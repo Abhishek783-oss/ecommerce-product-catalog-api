@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    container_name: product_db
+    environment:
+      POSTGRES_DB: productdb
+      POSTGRES_USER : postgres
+      POSTGRES_PASSWORD : Abhi123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - springnet
+  app:
+    build: .
+    container_name: product_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/productdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Abhi123
+    networks:
+      - springnet
+
+volumes:
+  pgdata:
+
+networks:
+  springnet:
